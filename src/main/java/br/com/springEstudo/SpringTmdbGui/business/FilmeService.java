@@ -2,26 +2,28 @@ package br.com.springEstudo.SpringTmdbGui.business;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.springEstudo.SpringTmdbGui.config.TmdbProperties;
 import br.com.springEstudo.SpringTmdbGui.dto.FilmeDto;
 import br.com.springEstudo.SpringTmdbGui.dto.TmdbSearchResponseDto;
 
 @Service
 public class FilmeService {
 
-	@Value("${tmdb.api.key}")
-	private String API_KEY;
+	private final TmdbProperties tmdbProperties;
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final String BASE_URL = "https://api.themoviedb.org/3/search/movie";
-	
+	// Construtor para injeção do TmdbProperties
+    public FilmeService(TmdbProperties tmdbProperties) {
+        this.tmdbProperties = tmdbProperties;
+    }
 	public Optional<FilmeDto> buscarFilme(String nomeFilme){
 		String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-				.queryParam("api_key", API_KEY)
+				.queryParam("api_key", tmdbProperties.getKey())
 				.queryParam("query",nomeFilme)
 				.queryParam("language", "pt-BR")
 				.toUriString();
