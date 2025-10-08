@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.JDialog;
 import java.awt.Toolkit;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
 import java.awt.Desktop;
 
 import javax.swing.JButton;
