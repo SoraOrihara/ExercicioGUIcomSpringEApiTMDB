@@ -1,6 +1,9 @@
 package br.com.springEstudo.SpringTmdbGui.business;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -41,4 +44,23 @@ public class FilmeService {
 		
 	}
 	
+	public List<FilmeDto> buscarSugestoesFilmes(String nomeFilme){
+		String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+				.queryParam("api_key", tmdbProperties.getKey())
+				.queryParam("query",nomeFilme)
+				.queryParam("language", "pt-BR")
+				.toUriString();
+		
+		try {
+			TmdbSearchResponseDto result= restTemplate.getForObject(url, TmdbSearchResponseDto.class);
+			if(result!=null&&result.results()!=null&&!result.results().isEmpty()) {
+				return result.results().stream().limit(4).collect(Collectors.toList());
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return Collections.emptyList();
+		
+	}
 }
